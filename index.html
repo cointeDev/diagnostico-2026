@@ -1,0 +1,2019 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Estratégico Pedagógico — COINTE / SEEC-RN (2026–2027)</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              cointe: {
+                950: "#081a33",
+                900: "#0f294a",
+                800: "#163b69",
+                700: "#1d4ed8",
+                600: "#0284c7",
+                500: "#0ea5e9",
+                100: "#e0f2fe",
+                50: "#f0f9ff",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Estilos base e transições suaves */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f1f5f9;
+        color: #1e293b;
+        overflow-x: hidden;
+      }
+
+      /* Animação suave de entrada das abas */
+      .tab-panel {
+        animation: fadeSlideIn 0.28s ease-out forwards;
+      }
+
+      @keyframes fadeSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Modo Apresentação: amplia legibilidade e remove elementos auxiliares */
+      body.presentation-mode {
+        font-size: 1.08rem;
+        background-color: #e2e8f0;
+      }
+
+      body.presentation-mode .hide-in-presentation {
+        display: none !important;
+      }
+
+      body.presentation-mode .presentation-container {
+        max-width: 100% !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+      }
+
+      body.presentation-mode .kpi-value {
+        font-size: 2.35rem !important;
+      }
+
+      body.presentation-mode .card-text-scale {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+      }
+
+      /* Barra de rolagem discreta para navegação horizontal em telas pequenas */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex flex-col antialiased selection:bg-sky-200 selection:text-cointe-900"
+  >
+    <!-- ===================================================================== -->
+    <!-- 1. CABEÇALHO EXECUTIVO                                                -->
+    <!-- ===================================================================== -->
+    <header
+      class="bg-gradient-to-r from-cointe-950 via-cointe-900 to-cointe-800 text-white shadow-lg sticky top-0 z-40 border-b border-sky-800/50"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-3 presentation-container"
+      >
+        <!-- Linha Superior: Identificação Institucional + Botão Modo Apresentação -->
+        <div
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-white/10"
+        >
+          <div class="flex items-start sm:items-center gap-3.5">
+            <div
+              class="bg-sky-500/20 border border-sky-400/30 p-2.5 rounded-xl shrink-0 mt-0.5 sm:mt-0"
+            >
+              <i data-lucide="compass" class="w-7 h-7 text-sky-300"></i>
+            </div>
+            <div>
+              <div
+                class="flex flex-wrap items-center gap-2 mb-1 hide-in-presentation"
+              >
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-200 border border-sky-400/30"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"
+                  ></span>
+                  SEEC-RN • Coordenadoria de Inovação e Tecnologias Educacionais
+                </span>
+                <span class="text-xs text-slate-300 font-medium"
+                  >Coleta: 10–12 Nov/2026</span
+                >
+              </div>
+              <h1
+                class="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-white leading-snug"
+              >
+                Diagnóstico 2026
+              </h1>
+              <p class="text-xs sm:text-sm text-sky-100/90 mt-0.5">
+                COINTE / SEEC-RN • Reunião de Planejamento da Equipe (Base:
+                Avaliação Anual 2026,
+                <strong class="font-semibold text-white">n = 8</strong>)
+              </p>
+            </div>
+          </div>
+
+          <!-- Controles de Sala / Reunião -->
+          <div
+            class="flex items-center gap-2.5 self-start lg:self-center shrink-0"
+          >
+            <button
+              id="btnPresentationMode"
+              onclick="togglePresentationMode()"
+              type="button"
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all shadow-sm cursor-pointer"
+              title="Ocultar elementos auxiliares e ampliar textos para projeção em sala"
+            >
+              <i
+                data-lucide="presentation"
+                id="iconPresentation"
+                class="w-4 h-4 text-sky-300"
+              ></i>
+              <span id="labelPresentation">Modo Apresentação</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Navegação Principal por 3 Abas Interativas -->
+        <nav
+          aria-label="Navegação do Painel"
+          class="pt-3 flex items-center gap-2 overflow-x-auto no-scrollbar"
+        >
+          <button
+            type="button"
+            data-tab="tab1"
+            onclick="switchTab('tab1')"
+            class="tab-btn active-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer bg-white text-cointe-900 shadow-sm"
+          >
+            <i data-lucide="bar-chart-3" class="w-4 h-4 text-sky-600"></i>
+            <span>1. Diagnóstico (2026)</span>
+          </button>
+
+          <button
+            type="button"
+            data-tab="tab2"
+            onclick="switchTab('tab2')"
+            class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer text-sky-100 hover:bg-white/10"
+          >
+            <i data-lucide="git-merge" class="w-4 h-4"></i>
+            <span>2. Fluxos, Formações &amp; Logística</span>
+          </button>
+
+          <button
+            type="button"
+            data-tab="tab3"
+            onclick="switchTab('tab3')"
+            class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer text-sky-100 hover:bg-white/10"
+          >
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>3. Portfólio Formativo (2027)</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- CONTEÚDO PRINCIPAL                                                    -->
+    <!-- ===================================================================== -->
+    <main
+      class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 presentation-container"
+    >
+      <!-- =================================================================== -->
+      <!-- ABA 1: DIAGNÓSTICO & KPIS (2026)                                    -->
+      <!-- =================================================================== -->
+      <section id="tab1" class="tab-panel space-y-6">
+        <!-- Síntese Executiva Rápida -->
+        <div
+          class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
+        >
+          <div class="flex items-start gap-3.5">
+            <div class="bg-sky-100 text-sky-700 p-2.5 rounded-xl shrink-0">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-900">
+                Leitura Executiva da Avaliação Interna (n = 8 respondentes)
+              </h2>
+              <p class="text-sm text-slate-600 mt-0.5 card-text-scale">
+                A Coordenação Pedagógica goza de
+                <strong class="text-emerald-700"
+                  >100% de legitimidade relacional e escuta ativa</strong
+                >, mas enfrenta gargalos operacionais na
+                <strong class="text-rose-700"
+                  >padronização de registros, coerência de processos e
+                  tempestividade da comunicação</strong
+                >.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Cartões de KPI Principais -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5"
+        >
+          <!-- KPI 1 -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm border-t-4 border-t-emerald-500 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg"
+                  >Ponto Forte #1</span
+                >
+                <i data-lucide="award" class="w-5 h-5 text-emerald-600"></i>
+              </div>
+              <h3 class="text-sm font-semibold text-slate-600">
+                Atuação Geral da Coordenação (Q1)
+              </h3>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold text-slate-900 kpi-value"
+                  >4,38</span
+                >
+                <span class="text-sm font-medium text-slate-400">/ 5,0</span>
+              </div>
+            </div>
+            <div
+              class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs"
+            >
+              <span class="font-semibold text-emerald-700"
+                >100% aprovação (notas 4 e 5)</span
+              >
+              <span class="text-slate-500">Mediana: 4,0</span>
+            </div>
+          </div>
+
+          <!-- KPI 2 -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm border-t-4 border-t-sky-500 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg"
+                  >Escuta Ativa</span
+                >
+                <i
+                  data-lucide="message-square-heart"
+                  class="w-5 h-5 text-sky-600"
+                ></i>
+              </div>
+              <h3 class="text-sm font-semibold text-slate-600">
+                Abertura para Ouvir Sugestões (Q5)
+              </h3>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold text-slate-900 kpi-value"
+                  >100%</span
+                >
+                <span class="text-sm font-medium text-sky-600">positiva</span>
+              </div>
+            </div>
+            <div
+              class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600"
+            >
+              <strong class="text-slate-800">75%</strong> Sempre (6/8) +
+              <strong class="text-slate-800">25%</strong> Na maioria das vezes
+              (2/8)
+            </div>
+          </div>
+
+          <!-- KPI 3 -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm border-t-4 border-t-rose-500 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg"
+                  >Principal Gargalo</span
+                >
+                <i
+                  data-lucide="alert-triangle"
+                  class="w-5 h-5 text-rose-600"
+                ></i>
+              </div>
+              <h3 class="text-sm font-semibold text-slate-600">
+                Processos Pedagógicos (Q7)
+              </h3>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold text-slate-900 kpi-value"
+                  >3,63</span
+                >
+                <span class="text-sm font-medium text-slate-400">/ 5,0</span>
+              </div>
+            </div>
+            <div
+              class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs"
+            >
+              <span class="font-semibold text-rose-700"
+                >50% neutro/crítico (notas 2 e 3)</span
+              >
+              <span class="text-slate-500">Mediana: 3,5</span>
+            </div>
+          </div>
+
+          <!-- KPI 4 -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm border-t-4 border-t-amber-500 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg"
+                  >Alerta de Fluxo</span
+                >
+                <i data-lucide="clock-alert" class="w-5 h-5 text-amber-600"></i>
+              </div>
+              <h3 class="text-sm font-semibold text-slate-600">
+                Tempestividade das Orientações (Q3)
+              </h3>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold text-slate-900 kpi-value"
+                  >12,5%</span
+                >
+                <span class="text-sm font-medium text-amber-700">"Sempre"</span>
+              </div>
+            </div>
+            <div
+              class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600"
+            >
+              <strong class="text-slate-800">50%</strong> Na maioria das vezes
+              (4/8) • <strong class="text-amber-700">37,5%</strong> Às vezes
+              (3/8)
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráficos da Aba 1: Ranking Likert + Distribuição Empilhada -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+          <!-- Gráfico 1: Ranking das 10 Dimensões (Barras Horizontais) -->
+          <div
+            class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm flex flex-col"
+          >
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4"
+            >
+              <div>
+                <h3 class="text-base font-bold text-slate-900">
+                  Ranking das 10 Dimensões Avaliadas (Escala 1–5)
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Média geral por indicador (ordenado da maior para a menor
+                  pontuação)
+                </p>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] font-semibold">
+                <span
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  >≥ 4,00</span
+                >
+                <span
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200"
+                  >3,80–3,99</span
+                >
+                <span
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200"
+                  >&lt; 3,80</span
+                >
+              </div>
+            </div>
+            <div class="relative w-full h-[380px] sm:h-[410px]">
+              <canvas id="chartLikertRanking"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quadro Comparativo: Ativos Consolidados vs Gargalos Críticos -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Ativos Consolidados (Manter) -->
+          <div
+            class="bg-white rounded-2xl p-6 border border-emerald-200 shadow-sm"
+          >
+            <div
+              class="flex items-center gap-3 pb-4 mb-4 border-b border-emerald-100"
+            >
+              <div class="bg-emerald-100 text-emerald-700 p-2.5 rounded-xl">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-emerald-950">
+                  Ativos Consolidados (Manter &amp; Potencializar)
+                </h3>
+                <p class="text-xs text-emerald-700">
+                  Fortalezas reconhecidas unanimemente pela equipe em 2026
+                </p>
+              </div>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-700 card-text-scale">
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="check-circle-2"
+                  class="w-4 h-4 text-emerald-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Gestão Humanizada e Escuta Ativa:</strong> Trato
+                  acolhedor, sensibilidade às demandas individuais e 100% de
+                  abertura para sugestões (Q1: 4,38; Q5: 100%).</span
+                >
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="check-circle-2"
+                  class="w-4 h-4 text-emerald-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Entrega Histórica das DCECs/RN:</strong> Publicação e
+                  início da implementação das Diretrizes Curriculares da
+                  Computação.</span
+                >
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="check-circle-2"
+                  class="w-4 h-4 text-emerald-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong
+                    >Reuniões Semanais &amp; Parcerias Estratégicas:</strong
+                  >
+                  Rotina semanal de alinhamento com FTV, UNDIME/RN (I
+                  Seminário), Google e Cactus.</span
+                >
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="check-circle-2"
+                  class="w-4 h-4 text-emerald-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Autonomia e Formação de Estagiários:</strong> Nota
+                  máxima (5,0) pelos 2 estagiários, com produção científica e
+                  preparação para mestrado.</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Gargalos Críticos (Corrigir em 2027) -->
+          <div
+            class="bg-white rounded-2xl p-6 border border-rose-200 shadow-sm"
+          >
+            <div
+              class="flex items-center gap-3 pb-4 mb-4 border-b border-rose-100"
+            >
+              <div class="bg-rose-100 text-rose-700 p-2.5 rounded-xl">
+                <i data-lucide="wrench" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-rose-950">
+                  Gargalos Críticos (Corrigir em 2027)
+                </h3>
+                <p class="text-xs text-rose-700">
+                  Fragilidades operacionais que exigem novos protocolos
+                </p>
+              </div>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-700 card-text-scale">
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="x-circle"
+                  class="w-4 h-4 text-rose-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Lacunas de Registro:</strong>
+                  Falhas nos
+                  <em>Planos de Formação</em>, <em>Atividades Realizadas</em> e
+                  <em>Fotos/Vídeos</em> (Q7: 3,63).</span
+                >
+              </li>
+
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="x-circle"
+                  class="w-4 h-4 text-rose-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Assimetria de Informação:</strong> Apenas 12,5%
+                  recebem orientações sempre a tempo (Q3) e representantes em
+                  eventos externos não compartilham sínteses.</span
+                >
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i
+                  data-lucide="x-circle"
+                  class="w-4 h-4 text-rose-600 shrink-0 mt-1"
+                ></i>
+                <span
+                  ><strong>Logística e Suporte Operacional SEEC:</strong> Atraso
+                  em materiais de expediente (Q28: 3,75) e falta de
+                  motoristas/carregadores, onerando servidores formadores.</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- ABA 2: FLUXOS, FORMAÇÕES & LOGÍSTICA                                -->
+      <!-- =================================================================== -->
+      <section id="tab2" class="tab-panel hidden space-y-6">
+        <!-- 4 Gráficos de Rosca: Fluxos de Comunicação e Satisfação Formativa -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5"
+        >
+          <!-- Rosca 1: Eventos Externos (Q15) -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col"
+          >
+            <div class="mb-3">
+              <span
+                class="text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded"
+                >Fluxo Interno • Q15</span
+              >
+              <h3 class="text-sm font-bold text-slate-900 mt-1.5">
+                Informação sobre Eventos Externos
+              </h3>
+            </div>
+            <div class="relative h-44 w-full my-auto">
+              <canvas id="chartDonutEventos"></canvas>
+            </div>
+            <p
+              class="text-xs text-slate-500 mt-3 pt-2.5 border-t border-slate-100"
+            >
+              Apenas <strong class="text-slate-800">25% (2/8)</strong> souberam
+              de todos os eventos;
+              <strong class="text-rose-700">75%</strong> tiveram acesso parcial
+              ou nulo.
+            </p>
+          </div>
+
+          <!-- Rosca 2: Parcerias (Q31) -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col"
+          >
+            <div class="mb-3">
+              <span
+                class="text-[11px] font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded"
+                >Articulação • Q31</span
+              >
+              <h3 class="text-sm font-bold text-slate-900 mt-1.5">
+                Informação sobre Parcerias
+              </h3>
+            </div>
+            <div class="relative h-44 w-full my-auto">
+              <canvas id="chartDonutParcerias"></canvas>
+            </div>
+            <p
+              class="text-xs text-slate-500 mt-3 pt-2.5 border-t border-slate-100"
+            >
+              Divisão exata:
+              <strong class="text-slate-800">50%</strong> informados
+              integralmente (4) e
+              <strong class="text-amber-700">50%</strong> parcialmente (4).
+            </p>
+          </div>
+
+          <!-- Rosca 3: Formações Presenciais (Q20) -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col"
+          >
+            <div class="mb-3">
+              <span
+                class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded"
+                >Execução • Q20</span
+              >
+              <h3 class="text-sm font-bold text-slate-900 mt-1.5">
+                Qualidade Formações Presenciais
+              </h3>
+            </div>
+            <div class="relative h-44 w-full my-auto">
+              <canvas id="chartDonutPresencial"></canvas>
+            </div>
+            <p
+              class="text-xs text-slate-500 mt-3 pt-2.5 border-t border-slate-100"
+            >
+              <strong class="text-emerald-700">87,5% aprovação</strong> (12,5%
+              Muito satisfatória + 75% Satisfatória; 12,5% N/A).
+            </p>
+          </div>
+
+          <!-- Rosca 4: Formações Virtuais (Q22) -->
+          <div
+            class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col"
+          >
+            <div class="mb-3">
+              <span
+                class="text-[11px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded"
+                >Execução • Q22</span
+              >
+              <h3 class="text-sm font-bold text-slate-900 mt-1.5">
+                Contribuição Formações Virtuais
+              </h3>
+            </div>
+            <div class="relative h-44 w-full my-auto">
+              <canvas id="chartDonutVirtual"></canvas>
+            </div>
+            <p
+              class="text-xs text-slate-500 mt-3 pt-2.5 border-t border-slate-100"
+            >
+              <strong class="text-indigo-700">75% aprovação</strong> (12,5%
+              Muito satisfatória + 62,5% Satisfatória; 25% N/A).
+            </p>
+          </div>
+        </div>
+
+        <!-- Indicadores Complementares de Volume e Visitas -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div
+            class="bg-white rounded-xl p-4 border border-slate-200 flex items-center gap-3.5"
+          >
+            <div class="bg-sky-100 text-sky-700 p-2.5 rounded-xl shrink-0">
+              <i data-lucide="calendar-range" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">
+                Volume Anual de Formações (Q26)
+              </p>
+              <p class="text-sm font-bold text-slate-900">
+                75% Adequado (6/8) • 25% Insuficiente (2/8)
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-white rounded-xl p-4 border border-slate-200 flex items-center gap-3.5"
+          >
+            <div class="bg-amber-100 text-amber-700 p-2.5 rounded-xl shrink-0">
+              <i data-lucide="map-pin" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">
+                Participação em Visitas Técnicas (Q11)
+              </p>
+              <p class="text-sm font-bold text-slate-900">
+                50% Participaram (4/8) • 50% Não (4/8)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro Interativo por Dimensão Qualitativa -->
+        <div
+          class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-5"
+        >
+          <div
+            class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4"
+          >
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Diagnóstico Qualitativo (2026 → 2027)
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-500">
+                Filtre por dimensão operacional para visualizar os achados da
+                equipe e as ações corretivas
+              </p>
+            </div>
+
+            <!-- Botões de Filtro Qualitativo -->
+            <div class="flex flex-wrap gap-2" id="qualitativeFilters">
+              <button
+                type="button"
+                onclick="filterQualitative('todos')"
+                data-qfilter="todos"
+                class="q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-cointe-900 text-white shadow-xs cursor-pointer transition-all"
+              >
+                Todos (4)
+              </button>
+              <button
+                type="button"
+                onclick="filterQualitative('gestao')"
+                data-qfilter="gestao"
+                class="q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition-all"
+              >
+                Gestão &amp; Processos
+              </button>
+              <button
+                type="button"
+                onclick="filterQualitative('formacoes')"
+                data-qfilter="formacoes"
+                class="q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition-all"
+              >
+                Formações
+              </button>
+              <button
+                type="button"
+                onclick="filterQualitative('eventos')"
+                data-qfilter="eventos"
+                class="q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition-all"
+              >
+                Eventos &amp; Parcerias
+              </button>
+              <button
+                type="button"
+                onclick="filterQualitative('logistica')"
+                data-qfilter="logistica"
+                class="q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition-all"
+              >
+                Logística &amp; Estágio
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards Dinâmicos das Dimensões Qualitativas -->
+          <div
+            id="qualitativeCardsGrid"
+            class="grid grid-cols-1 md:grid-cols-2 gap-5"
+          >
+            <!-- Card 1: Gestão & Processos -->
+            <article
+              data-qcategory="gestao"
+              class="q-card rounded-2xl border border-slate-200 bg-slate-50/60 p-5 flex flex-col justify-between space-y-4"
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-blue-100 text-blue-900"
+                  >
+                    <i data-lucide="settings-2" class="w-3.5 h-3.5"></i> Gestão
+                    &amp; Processos
+                  </span>
+                  <span class="text-xs font-semibold text-slate-500"
+                    >Média Q7: 3,63 | Q8: 3,75</span
+                  >
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-2">
+                  Governança, Registros e Protagonismo COINTE
+                </h4>
+                <div
+                  class="bg-white rounded-xl p-3.5 border border-slate-200/80 mb-3"
+                >
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1"
+                  >
+                    Diagnóstico 2026
+                  </p>
+                  <p class="text-sm text-slate-700 card-text-scale">
+                    Destaque positivo para as <strong>DCECs/RN</strong> e
+                    reuniões semanais. Porém, há excesso de planilhas paralelas
+                    com lacunas graves nos <em>Planos de Formação</em>,
+                    <em>Atividades Realizadas</em> e acervo de
+                    <em>Fotos/Vídeos</em> (impactando envios à ATP). Equipe pede
+                    equilíbrio entre <strong>NATEs, NIP e Maker</strong>,
+                    planejamento coletivo e postura propositiva da COINTE na
+                    SEEC (inclusive na Jornada Pedagógica).
+                  </p>
+                </div>
+              </div>
+              <div
+                class="bg-emerald-50/90 rounded-xl p-3.5 border border-emerald-200"
+              >
+                <p
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1 flex items-center gap-1.5"
+                >
+                  <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                  Ação Corretiva 2027
+                </p>
+                <p class="text-sm text-emerald-950 font-medium card-text-scale">
+                  Implantar <strong>Instrumental Único Digital</strong>, matriz
+                  clara de atribuições por núcleo, checagem mensal de registros.
+                </p>
+              </div>
+            </article>
+
+            <!-- Card 2: Formações -->
+            <article
+              data-qcategory="formacoes"
+              class="q-card rounded-2xl border border-slate-200 bg-slate-50/60 p-5 flex flex-col justify-between space-y-4"
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-900"
+                  >
+                    <i data-lucide="book-open-check" class="w-3.5 h-3.5"></i>
+                    Formações Presenciais &amp; Virtuais
+                  </span>
+                  <span class="text-xs font-semibold text-slate-500"
+                    >Presencial: 87,5% | Virtual: 75%</span
+                  >
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-2">
+                  Qualidade Metodológica e Engajamento em Trilhas
+                </h4>
+                <div
+                  class="bg-white rounded-xl p-3.5 border border-slate-200/80 mb-3"
+                >
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1"
+                  >
+                    Diagnóstico 2026
+                  </p>
+                  <p class="text-sm text-slate-700 card-text-scale">
+                    Excelência reconhecida nas ações com <strong>FTV</strong> e
+                    no <strong>I Seminário de Computação (UNDIME/RN)</strong>.
+                    Nos cursos virtuais autoinstrucionais do
+                    <strong>AVAMEC (LabCrie)</strong>, houve queda de
+                    engajamento ao longo dos módulos. Nas presenciais, pede-se
+                    mais espaço de escuta/troca entre cursistas e estabilidade
+                    no cronograma.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="bg-emerald-50/90 rounded-xl p-3.5 border border-emerald-200"
+              >
+                <p
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1 flex items-center gap-1.5"
+                >
+                  <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                  Ação Corretiva 2027
+                </p>
+                <p class="text-sm text-emerald-950 font-medium card-text-scale">
+                  Criar
+                  <strong>Clubes de Formação</strong>
+                  para acompanhar trilhas virtuais, inserir cursos de
+                  <strong>administração pública</strong> e garantir rodas de
+                  prática nos encontros presenciais.
+                </p>
+              </div>
+            </article>
+
+            <!-- Card 3: Eventos & Parcerias -->
+            <article
+              data-qcategory="eventos"
+              class="q-card rounded-2xl border border-slate-200 bg-slate-50/60 p-5 flex flex-col justify-between space-y-4"
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-cyan-100 text-cyan-900"
+                  >
+                    <i data-lucide="handshake" class="w-3.5 h-3.5"></i> Eventos
+                    &amp; Parcerias Estratégicas
+                  </span>
+                  <span class="text-xs font-semibold text-slate-500"
+                    >Média Parcerias Q32: 3,88</span
+                  >
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-2">
+                  Socialização de Conhecimento e Alianças Institucionais
+                </h4>
+                <div
+                  class="bg-white rounded-xl p-3.5 border border-slate-200/80 mb-3"
+                >
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1"
+                  >
+                    Diagnóstico 2026
+                  </p>
+                  <p class="text-sm text-slate-700 card-text-scale">
+                    Visitas técnicas relevantes (<strong>CEMURE</strong> e
+                    <strong>IFRN Natal/Zona Norte</strong>) e forte impacto de
+                    <strong
+                      >FTV, Google, Associação Cactus (Maratona Tech), UNDIME/RN
+                      e IFRN</strong
+                    >. Contudo, representantes em eventos externos retêm o
+                    conhecimento sem repassar à equipe.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="bg-emerald-50/90 rounded-xl p-3.5 border border-emerald-200"
+              >
+                <p
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1 flex items-center gap-1.5"
+                >
+                  <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                  Ação Corretiva 2027
+                </p>
+                <p class="text-sm text-emerald-950 font-medium card-text-scale">
+                  Instituir
+                  <strong>Protocolo de Devolutiva Obrigatória</strong> (síntese
+                  em reunião semanal + relatório/fotos em até 7 dias) e
+                  consolidar o <strong>NIP</strong> como interface técnica das
+                  parcerias.
+                </p>
+              </div>
+            </article>
+
+            <!-- Card 4: Logística & Estágio -->
+            <article
+              data-qcategory="logistica"
+              class="q-card rounded-2xl border border-slate-200 bg-slate-50/60 p-5 flex flex-col justify-between space-y-4"
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-900"
+                  >
+                    <i data-lucide="truck" class="w-3.5 h-3.5"></i> Logística
+                    &amp; Estágio
+                  </span>
+                  <span class="text-xs font-semibold text-slate-500"
+                    >Alimentação: 4,13 | Materiais: 3,75</span
+                  >
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-2">
+                  Infraestrutura Operacional e Acolhimento de Estagiários
+                </h4>
+                <div
+                  class="bg-white rounded-xl p-3.5 border border-slate-200/80 mb-3"
+                >
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1"
+                  >
+                    Diagnóstico 2026
+                  </p>
+                  <p class="text-sm text-slate-700 card-text-scale">
+                    Atraso na compra de materiais, conflitos de horário entre
+                    credenciamento/almoço, espaços desconfortáveis e
+                    <strong
+                      >falta de suporte operacional da SEEC (carregadores e
+                      motoristas)</strong
+                    >, levando formadores a usar carros/celulares próprios.
+                    <strong>Estagiários deram
+                    <strong>nota 5,0</strong>, destacando artigos sobre
+                    BNCC/DCECs.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="bg-emerald-50/90 rounded-xl p-3.5 border border-emerald-200"
+              >
+                <p
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1 flex items-center gap-1.5"
+                >
+                  <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                  Ação Corretiva 2027
+                </p>
+                <p class="text-sm text-emerald-950 font-medium card-text-scale">
+                  Exigir
+                  <strong
+                    >Plano da Ação Formativa com 30 dias de antecedência</strong
+                  >
+                  (vinculando compras, transporte e carregadores SEEC) + plano individual</strong> para
+                  estagiários.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- ABA 3: PORTFÓLIO FORMATIVO (2027)                                   -->
+      <!-- =================================================================== -->
+      <section id="tab3" class="tab-panel hidden space-y-6">
+        <!-- Cabeçalho de Contextualização Curricular -->
+        <div
+          class="bg-gradient-to-r from-cointe-900 to-cointe-800 text-white rounded-2xl p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        >
+          <div>
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-400/20 text-sky-200 border border-sky-300/30 mb-2"
+            >
+              Ancoragem Curricular: DCECs/RN &amp; BNCC Computação
+            </span>
+            <h2 class="text-lg sm:text-xl font-bold">
+              Portfólio Formativo Integrado — Ciclo 2027
+            </h2>
+            <p class="text-xs sm:text-sm text-sky-100/90 mt-1 max-w-3xl">
+              Consolidação das demandas temáticas propostas pela equipe técnica
+              (Questão 37) estruturada em 4 eixos transversais para formação
+              continuada da rede estadual.
+            </p>
+          </div>
+
+          <!-- Filtro por Eixo Temático -->
+          <div class="flex flex-wrap gap-2 shrink-0" id="axisFilters">
+            <button
+              type="button"
+              onclick="filterAxis('todos')"
+              data-afilter="todos"
+              class="a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-cointe-900 shadow-xs cursor-pointer transition-all"
+            >
+              Todos os Eixos
+            </button>
+            <button
+              type="button"
+              onclick="filterAxis('eixo1')"
+              data-afilter="eixo1"
+              class="a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 cursor-pointer transition-all"
+            >
+              Eixo I • IA &amp; Pós-Verdade
+            </button>
+            <button
+              type="button"
+              onclick="filterAxis('eixo2')"
+              data-afilter="eixo2"
+              class="a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 cursor-pointer transition-all"
+            >
+              Eixo II • DCECs &amp; Maker
+            </button>
+            <button
+              type="button"
+              onclick="filterAxis('eixo3')"
+              data-afilter="eixo3"
+              class="a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 cursor-pointer transition-all"
+            >
+              Eixo III • Inclusão
+            </button>
+            <button
+              type="button"
+              onclick="filterAxis('eixo4')"
+              data-afilter="eixo4"
+              class="a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 cursor-pointer transition-all"
+            >
+              Eixo IV • NIP &amp; REAs
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid dos 4 Eixos Curriculares -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="axisCardsGrid">
+          <!-- EIXO I -->
+          <div
+            data-axis="eixo1"
+            class="axis-card bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm border-l-4 border-l-sky-600 flex flex-col justify-between space-y-4"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span
+                  class="px-3 py-1 rounded-lg text-xs font-bold bg-sky-100 text-sky-900"
+                  >EIXO I • PRIORIDADE ALTA</span
+                >
+                <i data-lucide="brain-circuit" class="w-6 h-6 text-sky-600"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Inteligência Artificial Ética, Pós-Verdade e Letramento Crítico
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Foco em autoria docente/estudantil, progressão por etapa e
+                combate à desinformação
+              </p>
+
+              <div
+                class="mt-4 space-y-3 text-sm text-slate-700 card-text-scale"
+              >
+                <div
+                  class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70"
+                >
+                  <p
+                    class="font-bold text-slate-900 mb-1 flex items-center gap-1.5"
+                  >
+                    <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
+                    Uso Pedagógico &amp; Redesign Didático/Avaliativo
+                  </p>
+                  <p>
+                    Ferramentas de IA generativa aplicadas ao planejamento
+                    escolar, acompanhamento pedagógico e
+                    <strong>redesign didático e avaliativo</strong>
+                    (Aprendizagem Baseada em Projetos, avaliação de processo e
+                    preservação da autoria estudantil).
+                  </p>
+                </div>
+
+                <div
+                  class="bg-sky-50/70 p-3.5 rounded-xl border border-sky-200/80"
+                >
+                  <p
+                    class="font-bold text-sky-950 mb-1.5 flex items-center gap-1.5"
+                  >
+                    <i
+                      data-lucide="git-commit-horizontal"
+                      class="w-4 h-4 text-sky-700"
+                    ></i>
+                    Progressão Metodológica por Etapa de Ensino
+                  </p>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                    <div
+                      class="bg-white p-2.5 rounded-lg border border-sky-200"
+                    >
+                      <span class="font-bold text-sky-800 block"
+                        >Anos Iniciais</span
+                      >
+                      Uso exclusivo docente (planejamento e mediação).
+                    </div>
+                    <div
+                      class="bg-white p-2.5 rounded-lg border border-sky-200"
+                    >
+                      <span class="font-bold text-sky-800 block"
+                        >Anos Finais</span
+                      >
+                      Uso mediado e orientado pelo professor em aula.
+                    </div>
+                    <div
+                      class="bg-white p-2.5 rounded-lg border border-sky-200"
+                    >
+                      <span class="font-bold text-sky-800 block"
+                        >Ensino Médio</span
+                      >
+                      Análise crítica, ética e investigação algorítmica.
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70"
+                >
+                  <p
+                    class="font-bold text-slate-900 mb-1 flex items-center gap-1.5"
+                  >
+                    <i
+                      data-lucide="shield-alert"
+                      class="w-4 h-4 text-amber-600"
+                    ></i>
+                    Pós-Verdade &amp; Arquitetura Algorítmica
+                  </p>
+                  <p>
+                    Leitura lateral e checagem de fontes; alucinações de IA e
+                    mídias sintéticas; economia da atenção, bolhas de filtro,
+                    vieses algorítmicos, letramento em dados e a temática
+                    articuladora
+                    <strong
+                      >"Algoritmos do Cuidado e Inteligência de Dados"</strong
+                    >.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EIXO II -->
+          <div
+            data-axis="eixo2"
+            class="axis-card bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm border-l-4 border-l-emerald-600 flex flex-col justify-between space-y-4"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span
+                  class="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-900"
+                  >EIXO II • BASE CURRICULAR</span
+                >
+                <i data-lucide="cpu" class="w-6 h-6 text-emerald-600"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Implementação Prática das DCECs/RN e Metodologias Ativas
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Transposição didática nos 3 eixos da Computação com equidade de
+                infraestrutura
+              </p>
+
+              <div
+                class="mt-4 space-y-3 text-sm text-slate-700 card-text-scale"
+              >
+                <div
+                  class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70"
+                >
+                  <p
+                    class="font-bold text-slate-900 mb-2 flex items-center gap-1.5"
+                  >
+                    <i
+                      data-lucide="network"
+                      class="w-4 h-4 text-emerald-600"
+                    ></i>
+                    Ciclos Formativos nos 3 Eixos das DCECs/RN
+                  </p>
+                  <div class="flex flex-wrap gap-2 mb-2">
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 text-xs font-semibold"
+                      >Pensamento Computacional</span
+                    >
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 text-xs font-semibold"
+                      >Mundo Digital</span
+                    >
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 text-xs font-semibold"
+                      >Cultura Digital</span
+                    >
+                  </div>
+                  <p>
+                    Oficinas interdisciplinares garantindo equilíbrio rigoroso
+                    entre atividades <strong>plugadas e desplugadas</strong>,
+                    assegurando aplicabilidade imediata em escolas com baixa
+                    conectividade ou infraestrutura reduzida.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/80"
+                >
+                  <p
+                    class="font-bold text-emerald-950 mb-1 flex items-center gap-1.5"
+                  >
+                    <i data-lucide="bot" class="w-4 h-4 text-emerald-700"></i>
+                    Cultura Maker, Robótica &amp; Gamificação
+                  </p>
+                  <p>
+                    Aprofundamento na
+                    <strong>fundamentação teórica e metodológica</strong> das
+                    ações dos Laboratórios Makers, robótica educacional e
+                    gamificação como estratégias transversais de engajamento e
+                    aprendizagem ativa.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500"
+            >
+              <span>Articulação: Formadores COINTE + NATEs + Labs Makers</span>
+              <span class="font-semibold text-emerald-700"
+                >100% alinhado à BNCC</span
+              >
+            </div>
+          </div>
+
+          <!-- EIXO III -->
+          <div
+            data-axis="eixo3"
+            class="axis-card bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm border-l-4 border-l-violet-600 flex flex-col justify-between space-y-4"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span
+                  class="px-3 py-1 rounded-lg text-xs font-bold bg-violet-100 text-violet-900"
+                  >EIXO III • EQUIDADE &amp; ACESSO</span
+                >
+                <i
+                  data-lucide="accessibility"
+                  class="w-6 h-6 text-violet-600"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Tecnologias Digitais e IA na Educação Inclusiva
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Acessibilidade digital e desenho universal para a aprendizagem
+              </p>
+
+              <div
+                class="mt-4 space-y-3 text-sm text-slate-700 card-text-scale"
+              >
+                <div
+                  class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70"
+                >
+                  <p
+                    class="font-bold text-slate-900 mb-1 flex items-center gap-1.5"
+                  >
+                    <i
+                      data-lucide="heart-handshake"
+                      class="w-4 h-4 text-violet-600"
+                    ></i>
+                    Parceria Intersetorial COINTE + SUESP
+                  </p>
+                  <p>
+                    Construção conjunta de formações continuadas entre a equipe
+                    da COINTE e os especialistas da
+                    <strong
+                      >Subcoordenadoria de Educação Especial (SUESP)</strong
+                    >, inserindo a acessibilidade como pauta transversal em
+                    todos os ciclos.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-violet-50/70 p-3.5 rounded-xl border border-violet-200/80"
+                >
+                  <p
+                    class="font-bold text-violet-950 mb-1 flex items-center gap-1.5"
+                  >
+                    <i
+                      data-lucide="sparkles"
+                      class="w-4 h-4 text-violet-700"
+                    ></i>
+                    Tecnologias Assistivas &amp; Sequências Acessíveis
+                  </p>
+                  <p>
+                    Uso de recursos digitais e ferramentas de IA voltadas à
+                    acessibilidade comunicacional e cognitiva, com produção
+                    prática de
+                    <strong>sequências didáticas inclusivas</strong> nos eixos
+                    da Computação.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500"
+            >
+              <span>Articulação: COINTE + SUESP + NATEs</span>
+              <span class="font-semibold text-violet-700"
+                >Transversalidade na Rede</span
+              >
+            </div>
+          </div>
+
+          <!-- EIXO IV -->
+          <div
+            data-axis="eixo4"
+            class="axis-card bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm border-l-4 border-l-amber-500 flex flex-col justify-between space-y-4"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span
+                  class="px-3 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-900"
+                  >EIXO IV • CIÊNCIA &amp; COMUNICAÇÃO</span
+                >
+                <i data-lucide="microscope" class="w-6 h-6 text-amber-600"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Pesquisa, Iniciação Científica, Comunicação e Gestão Interna
+                (NIP)
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Fomento científico, inteligência de dados e disseminação de
+                práticas docentes
+              </p>
+
+              <div
+                class="mt-4 space-y-3 text-sm text-slate-700 card-text-scale"
+              >
+                <div
+                  class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70"
+                >
+                  <p
+                    class="font-bold text-slate-900 mb-1 flex items-center gap-1.5"
+                  >
+                    <i data-lucide="trophy" class="w-4 h-4 text-amber-600"></i>
+                    Cursos FIC, Olimpíadas &amp; Mapa da COINTE
+                  </p>
+                  <p>
+                    Oferta de cursos
+                    <strong>FIC em Inovação e Letramento Científico</strong>;
+                    mobilização sistemática para editais e competições (como a
+                    <strong>Maratona Tech / Cactus</strong>); e monitoramento
+                    estratégico de indicadores via
+                    <strong>Mapa da COINTE</strong>.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200/80"
+                >
+                  <p
+                    class="font-bold text-amber-950 mb-1 flex items-center gap-1.5"
+                  >
+                    <i data-lucide="mic" class="w-4 h-4 text-amber-700"></i>
+                    Podcast na RIEH &amp; Repositório Estadual de REAs
+                  </p>
+                  <p>
+                    Gravação do podcast institucional semanal (<strong
+                      >PodNIP / PodITE-RN</strong
+                    >) no estúdio da <strong>RIEH Natal-RN</strong> e
+                    institucionalização do
+                    <strong
+                      >Repositório Estadual de Recursos Educacionais Abertos
+                      (REAs)</strong
+                    >.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500"
+            >
+              <span>Liderança: NIP + Equipe de Comunicação + RIEH</span>
+              <span class="font-semibold text-amber-700"
+                >Certificação vinculada a REA</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- RODAPÉ INSTITUCIONAL                                                  -->
+    <!-- ===================================================================== -->
+    <footer
+      class="bg-white border-t border-slate-200 py-4 mt-8 hide-in-presentation"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500"
+      >
+        <span
+          >COINTE / SEEC-RN • Coordenadoria de Inovação e Tecnologias
+          Educacionais</span
+        >
+        <span
+          >Dados: Avaliação Anual do Pedagógico 2026 (n = 8) • Painel de
+          Planejamento 2027</span
+        >
+      </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- SCRIPTS DE DADOS, GRÁFICOS E INTERATIVIDADE                           -->
+    <!-- ===================================================================== -->
+    <script>
+      // -----------------------------------------------------------------------
+      // 1. DADOS REAIS DA AVALIAÇÃO ANUAL 2026 (n = 8)
+      // -----------------------------------------------------------------------
+      const likertDimensions = [
+        {
+          code: "Q1",
+          shortLabel: "Atuação Geral da Coordenação (Q1)",
+          fullLabel: "Atuação geral da Coordenação Pedagógica (Q1)",
+          mean: 4.38,
+          median: "4,0",
+          sd: "0,52",
+          approval: "100,0% (8/8)",
+          dist: { n2: 0, n3: 0, n4: 5, n5: 3 },
+        },
+        {
+          code: "Q29",
+          shortLabel: "Alimentação nas Formações (Q29)",
+          fullLabel: "Alimentação nas formações presenciais (Q29)",
+          mean: 4.13,
+          median: "4,0",
+          sd: "0,64",
+          approval: "87,5% (7/8)",
+          dist: { n2: 0, n3: 1, n4: 5, n5: 2 },
+        },
+        {
+          code: "Q2",
+          shortLabel: "Clareza da Comunicação (Q2)",
+          fullLabel: "Clareza e consistência da comunicação (Q2)",
+          mean: 4.0,
+          median: "4,0",
+          sd: "0,93",
+          approval: "62,5% (5/8)",
+          dist: { n2: 0, n3: 3, n4: 2, n5: 3 },
+        },
+        {
+          code: "Q4",
+          shortLabel: "Apoio Pedagógico Anual (Q4)",
+          fullLabel: "Apoio pedagógico ao longo do ano (Q4)",
+          mean: 3.88,
+          median: "4,0",
+          sd: "0,83",
+          approval: "62,5% (5/8)",
+          dist: { n2: 0, n3: 3, n4: 3, n5: 2 },
+        },
+        {
+          code: "Q24",
+          shortLabel: "Organização das Formações (Q24)",
+          fullLabel:
+            "Organização das formações: objetivos, cronograma, materiais (Q24)",
+          mean: 3.88,
+          median: "4,0",
+          sd: "0,64",
+          approval: "75,0% (6/8)",
+          dist: { n2: 0, n3: 2, n4: 5, n5: 1 },
+        },
+        {
+          code: "Q27",
+          shortLabel: "Estruturas Físicas Presenciais (Q27)",
+          fullLabel: "Estruturas físicas das formações presenciais (Q27)",
+          mean: 3.88,
+          median: "4,0",
+          sd: "0,64",
+          approval: "75,0% (6/8)",
+          dist: { n2: 0, n3: 2, n4: 5, n5: 1 },
+        },
+        {
+          code: "Q32",
+          shortLabel: "Contribuição das Parcerias (Q32)",
+          fullLabel: "Contribuição das parcerias nas ações formativas (Q32)",
+          mean: 3.88,
+          median: "4,0",
+          sd: "0,83",
+          approval: "62,5% (5/8)",
+          dist: { n2: 0, n3: 3, n4: 3, n5: 2 },
+        },
+        {
+          code: "Q8",
+          shortLabel: "Coerência dos Processos (Q8)",
+          fullLabel:
+            "Coerência dos processos com as necessidades da equipe (Q8)",
+          mean: 3.75,
+          median: "3,0",
+          sd: "1,04",
+          approval: "37,5% (3/8)",
+          dist: { n2: 0, n3: 5, n4: 0, n5: 3 },
+        },
+        {
+          code: "Q28",
+          shortLabel: "Materiais de Expediente (Q28)",
+          fullLabel:
+            "Aquisição de materiais de expediente para formações (Q28)",
+          mean: 3.75,
+          median: "4,0",
+          sd: "0,89",
+          approval: "75,0% (6/8)",
+          dist: { n2: 1, n3: 1, n4: 5, n5: 1 },
+        },
+        {
+          code: "Q7",
+          shortLabel: "Processos Pedagógicos (Q7)",
+          fullLabel: "Organização dos processos pedagógicos (Q7)",
+          mean: 3.63,
+          median: "3,5",
+          sd: "1,06",
+          approval: "50,0% (4/8)",
+          dist: { n2: 1, n3: 3, n4: 2, n5: 2 },
+        },
+      ];
+
+      // Instâncias globais dos gráficos Chart.js
+      let chartRankingInstance = null;
+      let chartStackedInstance = null;
+      let tab2ChartsInitialized = false;
+      let stackedMode = "count"; // 'count' ou 'percent'
+
+      // -----------------------------------------------------------------------
+      // 2. INICIALIZAÇÃO DOS GRÁFICOS DA ABA 1
+      // -----------------------------------------------------------------------
+      function initTab1Charts() {
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = "#334155";
+
+        // Gráfico 1: Barras Horizontais (Ranking Likert)
+        const ctxRanking = document
+          .getElementById("chartLikertRanking")
+          .getContext("2d");
+        const barColors = likertDimensions.map((item) => {
+          if (item.mean >= 4.0) return "#059669"; // Emerald 600
+          if (item.mean >= 3.8) return "#0284c7"; // Sky 600
+          return "#e11d48"; // Rose 600
+        });
+
+        chartRankingInstance = new Chart(ctxRanking, {
+          type: "bar",
+          data: {
+            labels: likertDimensions.map((d) => d.shortLabel),
+            datasets: [
+              {
+                label: "Média (1 a 5)",
+                data: likertDimensions.map((d) => d.mean),
+                backgroundColor: barColors,
+                borderRadius: 6,
+                barPercentage: 0.72,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                min: 0,
+                max: 5,
+                ticks: { stepSize: 1, font: { size: 11, weight: "600" } },
+                grid: { color: "#f1f5f9" },
+              },
+              y: {
+                ticks: { font: { size: 11, weight: "600" }, color: "#1e293b" },
+                grid: { display: false },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "#0f294a",
+                padding: 12,
+                cornerRadius: 10,
+                callbacks: {
+                  title: (items) =>
+                    likertDimensions[items[0].dataIndex].fullLabel,
+                  label: (ctx) => {
+                    const d = likertDimensions[ctx.dataIndex];
+                    return [
+                      ` Média: ${d.mean.toFixed(2).replace(".", ",")} / 5,00`,
+                      ` Mediana: ${d.median} | Desvio Padrão: ${d.sd}`,
+                      ` Aprovação (Notas 4 e 5): ${d.approval}`,
+                    ];
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Gráfico 2: Barras Empilhadas (Distribuição das Notas 2, 3, 4 e 5)
+        renderStackedChart("count");
+      }
+
+      function renderStackedChart(mode) {
+        const ctxStacked = document
+          .getElementById("chartLikertStacked")
+          .getContext("2d");
+        if (chartStackedInstance) {
+          chartStackedInstance.destroy();
+        }
+
+        const factor = mode === "percent" ? 12.5 : 1; // 1 respondente = 12,5% (n=8)
+        const unitSuffix = mode === "percent" ? "%" : " resp.";
+
+        chartStackedInstance = new Chart(ctxStacked, {
+          type: "bar",
+          data: {
+            labels: likertDimensions.map((d) => d.code),
+            datasets: [
+              {
+                label: "Nota 2 (Insatisfeito)",
+                data: likertDimensions.map((d) => d.dist.n2 * factor),
+                backgroundColor: "#e11d48", // Rose 600
+                borderRadius: 3,
+              },
+              {
+                label: "Nota 3 (Neutro)",
+                data: likertDimensions.map((d) => d.dist.n3 * factor),
+                backgroundColor: "#f59e0b", // Amber 500
+                borderRadius: 3,
+              },
+              {
+                label: "Nota 4 (Satisfeito)",
+                data: likertDimensions.map((d) => d.dist.n4 * factor),
+                backgroundColor: "#0ea5e9", // Sky 500
+                borderRadius: 3,
+              },
+              {
+                label: "Nota 5 (Muito Satisfeito)",
+                data: likertDimensions.map((d) => d.dist.n5 * factor),
+                backgroundColor: "#059669", // Emerald 600
+                borderRadius: 3,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                stacked: true,
+                min: 0,
+                max: mode === "percent" ? 100 : 8,
+                ticks: {
+                  stepSize: mode === "percent" ? 25 : 2,
+                  font: { size: 11, weight: "600" },
+                  callback: (val) => (mode === "percent" ? `${val}%` : val),
+                },
+                grid: { color: "#f1f5f9" },
+              },
+              y: {
+                stacked: true,
+                ticks: { font: { size: 11, weight: "700" }, color: "#1e293b" },
+                grid: { display: false },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  boxWidth: 12,
+                  usePointStyle: true,
+                  pointStyle: "rectRounded",
+                  font: { size: 11, weight: "600" },
+                },
+              },
+              tooltip: {
+                backgroundColor: "#0f294a",
+                padding: 12,
+                cornerRadius: 10,
+                callbacks: {
+                  title: (items) =>
+                    likertDimensions[items[0].dataIndex].fullLabel,
+                  label: (ctx) => {
+                    const rawVal = ctx.raw;
+                    const count =
+                      mode === "percent" ? Math.round(rawVal / 12.5) : rawVal;
+                    const pct = (count * 12.5).toFixed(1).replace(".", ",");
+                    return ` ${ctx.dataset.label}: ${count} de 8 (${pct}%)`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function toggleStackedMode(mode) {
+        stackedMode = mode;
+        const btnCount = document.getElementById("btnStackCount");
+        const btnPercent = document.getElementById("btnStackPercent");
+
+        if (mode === "count") {
+          btnCount.className =
+            "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-cointe-900 shadow-xs cursor-pointer transition-all";
+          btnPercent.className =
+            "px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition-all";
+        } else {
+          btnPercent.className =
+            "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-cointe-900 shadow-xs cursor-pointer transition-all";
+          btnCount.className =
+            "px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition-all";
+        }
+        renderStackedChart(mode);
+      }
+
+      // -----------------------------------------------------------------------
+      // 3. INICIALIZAÇÃO DOS GRÁFICOS DE ROSCA DA ABA 2
+      // -----------------------------------------------------------------------
+      function initTab2Charts() {
+        if (tab2ChartsInitialized) return;
+        tab2ChartsInitialized = true;
+
+        const commonDonutOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "62%",
+          plugins: {
+            legend: {
+              position: "right",
+              labels: {
+                boxWidth: 10,
+                padding: 10,
+                usePointStyle: true,
+                pointStyle: "circle",
+                font: { size: 11, weight: "600" },
+              },
+            },
+            tooltip: {
+              backgroundColor: "#0f294a",
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                label: (ctx) => {
+                  const val = ctx.raw;
+                  const pct = (val * 12.5).toFixed(1).replace(".", ",");
+                  return ` ${ctx.label}: ${val} resp. (${pct}%)`;
+                },
+              },
+            },
+          },
+        };
+
+        // Rosca 1: Eventos Externos (Q15)
+        new Chart(document.getElementById("chartDonutEventos"), {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Todos (25%)",
+              "Parcialmente (50%)",
+              "Não informado (25%)",
+            ],
+            datasets: [
+              {
+                data: [2, 4, 2],
+                backgroundColor: ["#059669", "#f59e0b", "#e11d48"],
+                borderWidth: 2,
+                borderColor: "#ffffff",
+              },
+            ],
+          },
+          options: commonDonutOptions,
+        });
+
+        // Rosca 2: Informação sobre Parcerias (Q31)
+        new Chart(document.getElementById("chartDonutParcerias"), {
+          type: "doughnut",
+          data: {
+            labels: ["Integralmente (50%)", "Parcialmente (50%)"],
+            datasets: [
+              {
+                data: [4, 4],
+                backgroundColor: ["#0284c7", "#f59e0b"],
+                borderWidth: 2,
+                borderColor: "#ffffff",
+              },
+            ],
+          },
+          options: commonDonutOptions,
+        });
+
+        // Rosca 3: Qualidade Formações Presenciais (Q20)
+        new Chart(document.getElementById("chartDonutPresencial"), {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Muito satisfatória (12,5%)",
+              "Satisfatória (75%)",
+              "N/A (12,5%)",
+            ],
+            datasets: [
+              {
+                data: [1, 6, 1],
+                backgroundColor: ["#059669", "#10b981", "#94a3b8"],
+                borderWidth: 2,
+                borderColor: "#ffffff",
+              },
+            ],
+          },
+          options: commonDonutOptions,
+        });
+
+        // Rosca 4: Contribuição Formações Virtuais (Q22)
+        new Chart(document.getElementById("chartDonutVirtual"), {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Muito satisfatória (12,5%)",
+              "Satisfatória (62,5%)",
+              "N/A (25%)",
+            ],
+            datasets: [
+              {
+                data: [1, 5, 2],
+                backgroundColor: ["#4f46e5", "#6366f1", "#94a3b8"],
+                borderWidth: 2,
+                borderColor: "#ffffff",
+              },
+            ],
+          },
+          options: commonDonutOptions,
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // 4. NAVEGAÇÃO POR ABAS & MODO APRESENTAÇÃO
+      // -----------------------------------------------------------------------
+      function switchTab(tabId) {
+        // Oculta todas as abas
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.add("hidden");
+        });
+
+        // Reseta estilos dos botões de aba
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("bg-white", "text-cointe-900", "shadow-sm");
+          btn.classList.add("text-sky-100", "hover:bg-white/10");
+          const icon = btn.querySelector("svg");
+          if (icon) icon.classList.remove("text-sky-600");
+        });
+
+        // Exibe aba selecionada
+        const targetPanel = document.getElementById(tabId);
+        if (targetPanel) {
+          targetPanel.classList.remove("hidden");
+        }
+
+        // Ativa botão da aba selecionada
+        const activeBtn = document.querySelector(
+          `.tab-btn[data-tab="${tabId}"]`,
+        );
+        if (activeBtn) {
+          activeBtn.classList.remove("text-sky-100", "hover:bg-white/10");
+          activeBtn.classList.add("bg-white", "text-cointe-900", "shadow-sm");
+          const icon = activeBtn.querySelector("svg");
+          if (icon) icon.classList.add("text-sky-600");
+        }
+
+        // Inicializa gráficos da Aba 2 somente quando a aba ficar visível
+        if (tabId === "tab2") {
+          requestAnimationFrame(() => {
+            initTab2Charts();
+          });
+        }
+      }
+
+      function togglePresentationMode() {
+        const body = document.body;
+        const isPresenting = body.classList.toggle("presentation-mode");
+        const btn = document.getElementById("btnPresentationMode");
+        const label = document.getElementById("labelPresentation");
+
+        if (isPresenting) {
+          btn.className =
+            "inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-amber-400 hover:bg-amber-300 text-cointe-950 border border-amber-300 transition-all shadow-md cursor-pointer";
+          label.textContent = "Sair do Modo Apresentação";
+        } else {
+          btn.className =
+            "inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all shadow-sm cursor-pointer";
+          label.textContent = "Modo Apresentação";
+        }
+
+        // Redimensiona gráficos ativos para acompanhar a nova largura
+        setTimeout(() => {
+          window.dispatchEvent(new Event("resize"));
+        }, 150);
+      }
+
+      // -----------------------------------------------------------------------
+      // 5. FILTROS INTERATIVOS (ABA 2 E ABA 3)
+      // -----------------------------------------------------------------------
+      function filterQualitative(category) {
+        document.querySelectorAll(".q-filter-btn").forEach((btn) => {
+          if (btn.dataset.qfilter === category) {
+            btn.className =
+              "q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-cointe-900 text-white shadow-xs cursor-pointer transition-all";
+          } else {
+            btn.className =
+              "q-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition-all";
+          }
+        });
+
+        const grid = document.getElementById("qualitativeCardsGrid");
+        const cards = document.querySelectorAll(".q-card");
+        cards.forEach((card) => {
+          if (category === "todos" || card.dataset.qcategory === category) {
+            card.classList.remove("hidden");
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        // Ajusta colunas se apenas 1 card estiver visível
+        if (category === "todos") {
+          grid.classList.add("md:grid-cols-2");
+        } else {
+          grid.classList.remove("md:grid-cols-2");
+        }
+      }
+
+      function filterAxis(axisId) {
+        document.querySelectorAll(".a-filter-btn").forEach((btn) => {
+          if (btn.dataset.afilter === axisId) {
+            btn.className =
+              "a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-cointe-900 shadow-xs cursor-pointer transition-all";
+          } else {
+            btn.className =
+              "a-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 cursor-pointer transition-all";
+          }
+        });
+
+        const grid = document.getElementById("axisCardsGrid");
+        document.querySelectorAll(".axis-card").forEach((card) => {
+          if (axisId === "todos" || card.dataset.axis === axisId) {
+            card.classList.remove("hidden");
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        if (axisId === "todos") {
+          grid.classList.add("lg:grid-cols-2");
+        } else {
+          grid.classList.remove("lg:grid-cols-2");
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // 6. INICIALIZAÇÃO AO CARREGAR A PÁGINA
+      // -----------------------------------------------------------------------
+      window.onload = function () {
+        try {
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+          initTab1Charts();
+        } catch (err) {
+          console.error("Erro ao inicializar componentes do painel:", err);
+        }
+      };
+    </script>
+  </body>
+</html>
